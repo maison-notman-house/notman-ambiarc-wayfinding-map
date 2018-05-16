@@ -4,29 +4,21 @@
     <script type="text/javascript" src="js/config.js"></script>
     <script src="./TemplateData/js/jquery-2.2.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+    <script type="text/javascript" src="js/ambiarc.service.js"></script>
     <script type="text/javascript" src="js/controller.js"></script>
-    <script type="text/javascript" src="js/move-controls-ui.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
     <link href="css/icons.css" rel="stylesheet">
   </head>
-  <body style="pointer-events: none">
+  <body ng-app="controller" style="pointer-events: none">
 
     <!--Navigation section-->
-    <div id="bootstrap" hidden>
-      <div class="container-fluid" style="z-index:100;">
+    <div ng-controller="NavCtrl">
+      <div class="container-fluid" style="z-index:100;" ng-if="mapLoaded">
         <div id="status_bar_container">
           <div id="status_bar_content">
             Naviguer vers une &eacute;tage ou une destination
-          </div>
-          <div class="separate-block buttons_row">
-            <div class="col-sm-6 floor_select_btn map_view">&Eacute;tage:</div>
-            <div class="col-sm-6 floor_select_btn select_wrapper"
-                 style="pointer-events: all">
-              <select id="bldg-floor-select"></select>
-            </div>
           </div>
         </div>
       </div>
@@ -42,21 +34,26 @@
     </div>
 
     <!--Controls section-->
-    <div>
+    <div ng-controller="ControlsCtrl">
       <div id="controls-section" style="pointer-events: all">
         <ul>
           <li class="">
-            <div class="controls-btn ctrl-zoom-in" aria-hidden="true"></div>
+            <div class="controls-btn ctrl-zoom-in" aria-hidden="true"
+                 ng-click="zoomIn()"></div>
           </li>
           <li class="">
-            <div class="controls-btn ctrl-rotate-left" aria-hidden="true"></div>
-            <div class="controls-btn ctrl-rotate-right" aria-hidden="true"></div>
+            <div class="controls-btn ctrl-rotate-left" aria-hidden="true"
+                 ng-click="rotateLeft()"></div>
+            <div class="controls-btn ctrl-rotate-right" aria-hidden="true"
+                 ng-click="rotateRight()"></div>
           </li>
           <li class="">
-            <div class=" controls-btn ctrl-zoom-out" aria-hidden="true"></div>
+            <div class="controls-btn ctrl-zoom-out" aria-hidden="true"
+                 ng-click="zoomOut()"></div>
           </li>
         </ul>
       </div>
     </div>
+
   </body>
 </html>
