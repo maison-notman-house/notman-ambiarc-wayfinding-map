@@ -42,6 +42,17 @@
               </select>
             </div>
           </div>
+          <div class="separate-block buttons_row" ng-if="showPOISelector">
+            <div class="col-sm-6 floor_select_btn map_view">Destination:</div>
+            <div class="col-sm-6 floor_select_btn select_wrapper"
+                 style="pointer-events: all">
+              <select id="bldg-floor-select" ng-model="poiIndex"
+                      ng-change="selectPOI(poiIndex)">
+                <option ng-repeat="(index, poi) in pois track by index"
+                        ng-value="index">{{poi.label}}</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
     </div>

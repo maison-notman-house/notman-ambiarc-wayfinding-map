@@ -8,9 +8,27 @@ angular.module('controller', [ 'reelyactive.ambiarc' ])
     $scope.mapLoaded = false;
     $scope.buildingIndex = 0;
     $scope.floorIndex = 0;
+    $scope.poiIndex = 0;
 
     ambiarcService.load(function(ambiarc) {
       $scope.mapLoaded = true;
+
+      ambiarc.registerForEvent(ambiarc.eventLabel.FloorSelected,
+                               function(event) {
+        for(var cBuilding = 0; cBuilding < $scope.hierarchy.length;
+            cBuilding++) {
+          var building = $scope.hierarchy[cBuilding];
+          if(building.id === event.detail.buildingId) {
+            for(var cFloor = 0; cFloor < building.floors.length; cFloor++) {
+              if(building.floors[cFloor].id === event.detail.floorId) {
+                $scope.buildingIndex = cBuilding;
+                $scope.floorIndex = cFloor;
+                return;
+              }
+            }
+          }
+        }
+      });
 
       ambiarcService.buildHierarchy(function(hierarchy) {
         $scope.hierarchy = hierarchy;
@@ -20,7 +38,13 @@ angular.module('controller', [ 'reelyactive.ambiarc' ])
         $scope.$apply();
       });
 
-      ambiarcService.buildPOIs(function(pois) { });
+      ambiarcService.buildPOIs(function(pois) {
+        $scope.pois = pois;
+        if($scope.pois.length > 1) {
+          $scope.showPOISelector = true;
+        }
+        $scope.$apply();
+      });
 
       $scope.selectBuilding = function(buildingIndex) { };
 
@@ -29,6 +53,13 @@ angular.module('controller', [ 'reelyactive.ambiarc' ])
         var floorId = $scope.hierarchy[$scope.buildingIndex]
                         .floors[floorIndex].id;
         ambiarc.focusOnFloor(buildingId, floorId);
+      };
+
+      $scope.selectPOI = function(poiIndex) {
+        var mapLabelId = $scope.pois[poiIndex].id;
+        var floorId = $scope.pois[poiIndex].floorId;
+        var buildingId = $scope.pois[poiIndex].buildingId;
+        ambiarc.focusOnMapLabel(mapLabelId);
       };
     });
 
