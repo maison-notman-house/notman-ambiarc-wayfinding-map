@@ -24,10 +24,10 @@
             <div class="col-sm-6 floor_select_btn map_view">B&acirc;timent:</div>
             <div class="col-sm-6 floor_select_btn select_wrapper"
                  style="pointer-events: all">
-              <select id="bldg-floor-select" ng-model="buildingIndex"
-                      ng-change="selectBuilding(buildingIndex)">
-                <option ng-repeat="(index, building) in hierarchy track by index"
-                        ng-value="index">{{building.id}}</option>
+              <select id="bldg-floor-select" ng-model="buildingId"
+                      ng-change="selectBuilding(buildingId)">
+                <option ng-repeat="building in hierarchy track by building.id"
+                        ng-value="building.id">{{building.id}}</option>
               </select>
             </div>
           </div>
@@ -35,10 +35,11 @@
             <div class="col-sm-6 floor_select_btn map_view">&Eacute;tage:</div>
             <div class="col-sm-6 floor_select_btn select_wrapper"
                  style="pointer-events: all">
-              <select id="bldg-floor-select" ng-model="floorIndex"
-                      ng-change="selectFloor(floorIndex)">
-                <option ng-repeat="(index, floor) in hierarchy[buildingIndex].floors track by index"
-                        ng-value="index">{{floor.floorName}}</option>
+              <select id="bldg-floor-select" ng-model="floorId"
+                      ng-change="selectFloor(floorId)">
+                <option ng-repeat="floor in building.floors
+                                   track by floor.id"
+                        ng-value="floor.id">{{floor.floorName}}</option>
               </select>
             </div>
           </div>
@@ -46,10 +47,10 @@
             <div class="col-sm-6 floor_select_btn map_view">Destination:</div>
             <div class="col-sm-6 floor_select_btn select_wrapper"
                  style="pointer-events: all">
-              <select id="bldg-floor-select" ng-model="poiIndex"
-                      ng-change="selectPOI(poiIndex)">
-                <option ng-repeat="(index, poi) in pois track by index"
-                        ng-value="index">{{poi.label}}</option>
+              <select id="bldg-floor-select" ng-model="poiId"
+                      ng-change="selectPOI(poiId)">
+                <option ng-repeat="poi in pois track by poi.id"
+                        ng-value="poi.id">{{poi.label}}</option>
               </select>
             </div>
           </div>
