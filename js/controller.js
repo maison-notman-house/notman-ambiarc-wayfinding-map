@@ -20,6 +20,8 @@ angular.module('controller', [ 'reelyactive.ambiarc' ])
         $scope.$apply();
       });
 
+      ambiarcService.buildPOIs(function(pois) { });
+
       $scope.selectBuilding = function(buildingIndex) { };
 
       $scope.selectFloor = function(floorIndex) {

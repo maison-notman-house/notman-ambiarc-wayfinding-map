@@ -4,6 +4,7 @@
  */
 
 
+const DEFAULT_MAP_LABEL_FILE = 'map/geodata.json';
 const DEFAULT_EXTERIOR_NAME = { floorName: "Exterior" };
 const EXTERIOR_KEY_ID = 'EXT';
 
@@ -65,9 +66,35 @@ angular.module('reelyactive.ambiarc', [])
       });
     }
 
+    function buildPOIs(callback) {
+      if(!loadComplete) {
+        return callback([]);
+      }
+      ambiarc.poiList = {};
+      ambiarc.loadRemoteMapLabels(DEFAULT_MAP_LABEL_FILE)
+        .then(function(mapLabels) {
+          var pois = [];
+          for(var cLabel = 0; cLabel < mapLabels.length; cLabel++) {
+            var mapLabel = mapLabels[cLabel];
+            var mapLabelId = mapLabel.properties.id;
+            ambiarc.poiList[mapLabelId] = mapLabel.properties;
+            var poi = {
+              id: mapLabelId,
+              buildingId: mapLabel.properties.buildingId,
+              floorId: mapLabel.properties.floorId,
+              label: mapLabel.properties.label,
+              user_properties: mapLabel.user_properties
+            };
+            pois.push(poi);
+          }
+          return callback(pois);
+        });
+    }
+
     return {
       load: setLoadCallback,
-      buildHierarchy: buildHierarchy
+      buildHierarchy: buildHierarchy,
+      buildPOIs: buildPOIs
     };
 
   });
