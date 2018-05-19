@@ -20,6 +20,28 @@
           <div id="status_bar_content">
             Naviguer vers une &eacute;tage ou une destination
           </div>
+          <div class="separate-block buttons_row" ng-if="showBuildingSelector">
+            <div class="col-sm-6 floor_select_btn map_view">B&acirc;timent:</div>
+            <div class="col-sm-6 floor_select_btn select_wrapper"
+                 style="pointer-events: all">
+              <select id="bldg-floor-select" ng-model="buildingIndex"
+                      ng-change="selectBuilding(buildingIndex)">
+                <option ng-repeat="(index, building) in hierarchy track by index"
+                        ng-value="index">{{building.id}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="separate-block buttons_row">
+            <div class="col-sm-6 floor_select_btn map_view">&Eacute;tage:</div>
+            <div class="col-sm-6 floor_select_btn select_wrapper"
+                 style="pointer-events: all">
+              <select id="bldg-floor-select" ng-model="floorIndex"
+                      ng-change="selectFloor(floorIndex)">
+                <option ng-repeat="(index, floor) in hierarchy[buildingIndex].floors track by index"
+                        ng-value="index">{{floor.floorName}}</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -6,10 +6,28 @@ angular.module('controller', [ 'reelyactive.ambiarc' ])
   // Navigation controller
   .controller('NavCtrl', function($scope, ambiarcService) {
     $scope.mapLoaded = false;
+    $scope.buildingIndex = 0;
+    $scope.floorIndex = 0;
 
     ambiarcService.load(function(ambiarc) {
       $scope.mapLoaded = true;
-      $scope.$apply();
+
+      ambiarcService.buildHierarchy(function(hierarchy) {
+        $scope.hierarchy = hierarchy;
+        if($scope.hierarchy.length > 1) {
+          $scope.showBuildingSelector = true;
+        }
+        $scope.$apply();
+      });
+
+      $scope.selectBuilding = function(buildingIndex) { };
+
+      $scope.selectFloor = function(floorIndex) {
+        var buildingId = $scope.hierarchy[$scope.buildingIndex].id;
+        var floorId = $scope.hierarchy[$scope.buildingIndex]
+                        .floors[floorIndex].id;
+        ambiarc.focusOnFloor(buildingId, floorId);
+      };
     });
 
   })
