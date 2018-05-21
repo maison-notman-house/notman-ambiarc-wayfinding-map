@@ -76,7 +76,7 @@ angular.module('reelyactive.ambiarc', [])
           var pois = [];
           for(var cLabel = 0; cLabel < mapLabels.length; cLabel++) {
             var mapLabel = mapLabels[cLabel];
-            var mapLabelId = mapLabel.properties.id;
+            var mapLabelId = mapLabel.properties.mapLabelId;
             ambiarc.poiList[mapLabelId] = mapLabel.properties;
             var poi = {
               id: mapLabelId,
