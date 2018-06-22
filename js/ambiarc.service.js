@@ -60,8 +60,8 @@ angular.module('reelyactive.ambiarc', [])
 
     function handleMapLoaded() {
       // TODO: use mapOptions to set colours/theme
-      ambiarc.setSkyColor("#d6ebf2","#f2ddd6");
-      ambiarc.setLightColor("#a0a0a0","#a0a0a0","#a0a0a0");
+      ambiarc.setSkyColor("#827282", "#827282");
+      ambiarc.setLightColor("#a0a0a0", "#a0a0a0", "#a0a0a0");
       ambiarc.setMapTheme(ambiarc.mapTheme.light);
 
       mapLoadComplete = true;
