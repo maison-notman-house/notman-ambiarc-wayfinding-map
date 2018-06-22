@@ -28,7 +28,6 @@ angular.module('reelyactive.ambiarc', [])
                                    window.location.pathname.lastIndexOf("/"));
 
         ambiarc.setMapAssetBundleURL(url);
-        //ambiarc.loadMap('notman'); // TODO: move map name to config.js?
         ambiarc.loadMap(config.mapName);
 
         loadComplete = true;
