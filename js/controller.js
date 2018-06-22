@@ -10,31 +10,39 @@ angular.module('controller', [ 'reelyactive.ambiarc' ])
     ambiarcService.load(function(ambiarc) {
       $scope.mapLoaded = true;
 
+      ambiarc.registerForEvent(ambiarc.eventLabel.FinishedLoadingMap,
+                               function() {
+        ambiarcService.buildHierarchy(function(hierarchy) {
+          $scope.hierarchy = hierarchy;
+          if($scope.hierarchy.length > 1) {
+            $scope.showBuildingSelector = true;
+          }
+          $scope.building = hierarchy[0];
+          $scope.buildingId = hierarchy[0].id;
+          $scope.floorId = hierarchy[0].floors[0].id;
+          $scope.$apply();
+        });
+
+        ambiarcService.buildPOIs(function(pois) {
+          $scope.pois = pois;
+          if($scope.pois.length > 1) {
+            $scope.showPOISelector = true;
+            $scope.poiId = pois[0].id;
+          }
+          $scope.$apply();
+        });
+
+        ambiarc.setSkyColor("#d6ebf2","#f2ddd6");
+        ambiarc.setLightColor("#a0a0a0","#a0a0a0","#a0a0a0");
+        ambiarc.setMapTheme(ambiarc.mapTheme.light);
+        ambiarc.hideLoadingScreen();
+      });
+
       ambiarc.registerForEvent(ambiarc.eventLabel.FloorSelected,
                                function(event) {
         updateBuilding(event.detail.buildingId);
         $scope.buildingId = event.detail.buildingId;
         $scope.floorId = event.detail.floorId;
-      });
-
-      ambiarcService.buildHierarchy(function(hierarchy) {
-        $scope.hierarchy = hierarchy;
-        if($scope.hierarchy.length > 1) {
-          $scope.showBuildingSelector = true;
-        }
-        $scope.building = hierarchy[0];
-        $scope.buildingId = hierarchy[0].id;
-        $scope.floorId = hierarchy[0].floors[0].id;
-        $scope.$apply();
-      });
-
-      ambiarcService.buildPOIs(function(pois) {
-        $scope.pois = pois;
-        if($scope.pois.length > 1) {
-          $scope.showPOISelector = true;
-          $scope.poiId = pois[0].id;
-        }
-        $scope.$apply();
       });
 
       $scope.selectBuilding = function(buildingId) {

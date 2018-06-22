@@ -21,6 +21,16 @@ angular.module('reelyactive.ambiarc', [])
       $("#ambiarcIframe")[0].contentWindow.document.addEventListener(
                                          'AmbiarcAppInitialized', function() {
         ambiarc = $("#ambiarcIframe")[0].contentWindow.Ambiarc;
+
+        var url = location.protocol + '//' + location.hostname +
+                  (location.port ? ':'+location.port: '') +
+                  window.location.pathname.substring(0,
+                                   window.location.pathname.lastIndexOf("/"));
+
+        ambiarc.setMapAssetBundleURL(url);
+        //ambiarc.loadMap('notman'); // TODO: move map name to config.js?
+        ambiarc.loadMap(config.mapName);
+
         loadComplete = true;
         for(var cCallback = 0; cCallback < waitUntilLoadedCallbacks.length;
             cCallback++) {

@@ -1,4 +1,5 @@
 var config = {
+  mapName: "notman",
   floorsNameHolders: {
     "B00001::EXT": "Extérieur",
     "B00001::L003": "03",
