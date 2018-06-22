@@ -8,10 +8,10 @@ angular.module('controller', [ 'reelyactive.ambiarc' ])
     $scope.mapLoaded = false;
 
     ambiarcService.load(function(ambiarc) {
-      $scope.mapLoaded = true;
 
-      ambiarc.registerForEvent(ambiarc.eventLabel.FinishedLoadingMap,
-                               function() {
+      ambiarcService.onMapLoaded({}, function() {
+        $scope.mapLoaded = true;
+
         ambiarcService.buildHierarchy(function(hierarchy) {
           $scope.hierarchy = hierarchy;
           if($scope.hierarchy.length > 1) {
@@ -31,11 +31,6 @@ angular.module('controller', [ 'reelyactive.ambiarc' ])
           }
           $scope.$apply();
         });
-
-        ambiarc.setSkyColor("#d6ebf2","#f2ddd6");
-        ambiarc.setLightColor("#a0a0a0","#a0a0a0","#a0a0a0");
-        ambiarc.setMapTheme(ambiarc.mapTheme.light);
-        ambiarc.hideLoadingScreen();
       });
 
       ambiarc.registerForEvent(ambiarc.eventLabel.FloorSelected,

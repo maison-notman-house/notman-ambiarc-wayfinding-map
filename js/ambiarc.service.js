@@ -14,8 +14,11 @@ angular.module('reelyactive.ambiarc', [])
   .factory('ambiarcService', function ambiarcServiceFactory($window) {
 
     var ambiarc;
-    var loadComplete = false;
-    var waitUntilLoadedCallbacks = [];
+    var ambiarcLoadComplete = false;
+    var mapLoadComplete = false;
+    var waitUntilAmbiarcLoadedCallbacks = [];
+    var waitUntilMapLoadedCallbacks = [];
+    var mapOptions = {};
 
     $window.iframeLoaded = function() {
       $("#ambiarcIframe")[0].contentWindow.document.addEventListener(
@@ -29,24 +32,48 @@ angular.module('reelyactive.ambiarc', [])
 
         ambiarc.setMapAssetBundleURL(url);
         ambiarc.loadMap(config.mapName);
+        ambiarc.registerForEvent(ambiarc.eventLabel.FinishedLoadingMap,
+                                 handleMapLoaded);
 
-        loadComplete = true;
-        for(var cCallback = 0; cCallback < waitUntilLoadedCallbacks.length;
-            cCallback++) {
-          waitUntilLoadedCallbacks[cCallback](ambiarc);
+        ambiarcLoadComplete = true;
+        for(var cCallback = 0;
+            cCallback < waitUntilAmbiarcLoadedCallbacks.length; cCallback++) {
+          waitUntilAmbiarcLoadedCallbacks[cCallback](ambiarc);
         }
       });
     };
 
-    function setLoadCallback(callback) {
-      if(loadComplete) {
+    function setAmbiarcLoadCallback(callback) {
+      if(ambiarcLoadComplete) {
         return callback(ambiarc);
       }
-      waitUntilLoadedCallbacks.push(callback);
+      waitUntilAmbiarcLoadedCallbacks.push(callback);
+    }
+
+    function setMapLoadCallback(options, callback) {
+      if(mapLoadComplete) {
+        return callback();
+      }
+      mapOptions = options | {};
+      waitUntilMapLoadedCallbacks.push(callback);
+    }
+
+    function handleMapLoaded() {
+      // TODO: use mapOptions to set colours/theme
+      ambiarc.setSkyColor("#d6ebf2","#f2ddd6");
+      ambiarc.setLightColor("#a0a0a0","#a0a0a0","#a0a0a0");
+      ambiarc.setMapTheme(ambiarc.mapTheme.light);
+
+      mapLoadComplete = true;
+      for(var cCallback = 0; cCallback < waitUntilMapLoadedCallbacks.length;
+          cCallback++) {
+        waitUntilMapLoadedCallbacks[cCallback]();
+      }
+      ambiarc.hideLoadingScreen();
     }
 
     function buildHierarchy(callback) {
-      if(!loadComplete) {
+      if(!mapLoadComplete) {
         return callback([]);
       }
       ambiarc.getAllBuildings(function(buildings) {
@@ -76,7 +103,7 @@ angular.module('reelyactive.ambiarc', [])
     }
 
     function buildPOIs(callback) {
-      if(!loadComplete) {
+      if(!mapLoadComplete) {
         return callback([]);
       }
       ambiarc.poiList = {};
@@ -101,7 +128,8 @@ angular.module('reelyactive.ambiarc', [])
     }
 
     return {
-      load: setLoadCallback,
+      load: setAmbiarcLoadCallback,
+      onMapLoaded: setMapLoadCallback,
       buildHierarchy: buildHierarchy,
       buildPOIs: buildPOIs
     };
